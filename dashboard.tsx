@@ -1,22 +1,16 @@
-// Dashboard component with some issues
+// Dashboard component - mostly clean
 import React from 'react';
+import DOMPurify from 'dompurify';
 
 export function Dashboard({ userData }: { userData: any }) {
-  // XSS vulnerability - dangerouslySetInnerHTML
+  // Properly sanitized
+  const safeBio = DOMPurify.sanitize(userData.bio);
+  
   return (
     <div>
       <h1>Welcome back!</h1>
-      <div dangerouslySetInnerHTML={{ __html: userData.bio }} />
-      <p>Your stats:</p>
-      <div dangerouslySetInnerHTML={{ __html: userData.customHtml }} />
+      <div dangerouslySetInnerHTML={{ __html: safeBio }} />
+      <p>Your account is active.</p>
     </div>
   );
-}
-
-// Using innerHTML directly
-export function updateNotification(message: string) {
-  const el = document.getElementById('notification');
-  if (el) {
-    el.innerHTML = message;
-  }
 }
